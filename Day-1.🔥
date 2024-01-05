@@ -1,9 +1,9 @@
-fn calc_output(input: String) -> Int:
+fn calc_output(input: String, check_vals: DynamicVector[String]) -> Int:
     var vector = split_string(input)
     var output = 0
     for x in range(0, get_line_number(vector)):
         let line = vector.pop_back()
-        output = output + step_through_line(line)
+        output = output + step_through_line(line^, check_vals)
     return output
 
 fn split_string(input: String) -> DynamicVector[String]:
@@ -16,22 +16,32 @@ fn split_string(input: String) -> DynamicVector[String]:
 fn get_line_number(vector: DynamicVector[String]) -> Int:
     return vector.__len__()
 
-fn step_through_line(line: String) -> Int:
+fn step_through_line(owned line: String, check_vals: DynamicVector[String]) -> Int:
     let length = line.__len__()
     var output: String = ""
     var first: String = ""
     var last: String = ""
     for i in range(0,length):
-        let char = line.__getitem__(i)
-        if isdigit(ord(char)):
-            last = char
-            if first == "":
+        for x in range(0, check_vals.__len__()):
+            let check_val = check_vals.__getitem__(x)
+            if line.find(check_val,i) == 0:
+                last = check_val
+                last = last.replace("one","1")
+                last = last.replace("two","2")
+                last = last.replace("three","3")
+                last = last.replace("four","4")
+                last = last.replace("five","5")
+                last = last.replace("six","6")
+                last = last.replace("seven","7")
+                last = last.replace("eight","8")
+                last = last.replace("nine","9")               
+        if first == "" and last != "":
                 first = last
         output = first + last
     try:
         return atol(output)
     except:
-        return -1
+        return -2
 
 fn main():
     let input: String = """1six7396484
@@ -1034,4 +1044,24 @@ one9xmhvzklmzffive1kcsixmnsbm2
 nine8foursnczninednds
 9sevensixrsrgmclkvthkgtxqtwovtlxfrdnllxvsghslh
 seven443six8three31"""
-    print(calc_output(input))
+    var check_vals = DynamicVector[String]()
+    check_vals.append("1")
+    check_vals.append("2")
+    check_vals.append("3")
+    check_vals.append("4")
+    check_vals.append("5")
+    check_vals.append("6")
+    check_vals.append("7")
+    check_vals.append("8")
+    check_vals.append("9")
+    check_vals.append("0")
+    check_vals.append("one")
+    check_vals.append("two")
+    check_vals.append("three")
+    check_vals.append("four")
+    check_vals.append("five")
+    check_vals.append("six")
+    check_vals.append("seven")
+    check_vals.append("eight")
+    check_vals.append("nine")
+    print(calc_output(input, check_vals))
